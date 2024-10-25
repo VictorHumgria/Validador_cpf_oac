@@ -58,5 +58,7 @@ Para executar o projeto, você precisará de:
 Este projeto foi desenvolvido como parte de um trabalho acadêmico, e contribuições são bem-vindas. Sinta-se à vontade para enviar sugestões e pull requests!
 
 --- 
-
-Esse README cobre todos os arquivos utilizados no projeto, desde a interface Python até os módulos Assembly.
+criadores: 
+        - JOAO VICTOR SILVA DE HUNGRIA
+        - RENNE BISPO DOS SANTOS
+        - TALYSSON FELIPE VASCONCELOS SANTOS
