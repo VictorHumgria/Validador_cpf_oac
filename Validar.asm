@@ -1,83 +1,83 @@
 .data
-cpf_input:      .space  15                 # Espaço para entrada do CPF (14 caracteres + '\0')
-cpf_digits:     .space  12                 # Espaço para armazenar os dígitos (0 a 9) e DVs calculados
-msg_input:      .asciiz "Digite o CPF (somente números): "
-msg_valid:      .asciiz "\nCPF válido.\n"
-msg_invalid:    .asciiz "\nCPF inválido.\n"
-msg_error:      .asciiz "\nEntrada inválida. Certifique-se de digitar 11 dígitos numéricos.\n"
+cpf_input:      .space  15                 # Espaï¿½o para entrada do CPF (14 caracteres + '\0')
+cpf_digits:     .space  12                 # Espaï¿½o para armazenar os dï¿½gitos (0 a 9) e DVs calculados
+msg_input:      .asciiz "Digite o CPF (somente numeros): "
+msg_valid:      .asciiz "\nCPF valido.\n"
+msg_invalid:    .asciiz "\nCPF invalido.\n"
+msg_error:      .asciiz "\nEntrada invalida. Certifique-se de digitar 11 digitos numuricos.\n"
 
 .text
 .globl main
 
 main:
-    # Solicita ao usuário que digite o CPF
+    # Solicita ao usuï¿½rio que digite o CPF
     li $v0, 4                              # syscall: print_string
     la $a0, msg_input
     syscall
 
-    # Lê a entrada do usuário
+    # Lï¿½ a entrada do usuï¿½rio
     li $v0, 8                              # syscall: read_string
     la $a0, cpf_input                      # Buffer para armazenar a entrada
-    li $a1, 15                             # Tamanho máximo da entrada
+    li $a1, 15                             # Tamanho mï¿½ximo da entrada
     syscall
 
-    # Processa a entrada para extrair apenas os dígitos numéricos
+    # Processa a entrada para extrair apenas os dï¿½gitos numï¿½ricos
     la $t0, cpf_input                      # Ponteiro para a entrada
-    la $t1, cpf_digits                     # Ponteiro para armazenar os dígitos
-    li $t2, 0                              # Contador de dígitos numéricos
+    la $t1, cpf_digits                     # Ponteiro para armazenar os dï¿½gitos
+    li $t2, 0                              # Contador de dï¿½gitos numï¿½ricos
 
 process_input:
     lb $t3, 0($t0)                         # Carrega um byte da entrada
     beqz $t3, check_length                 # Se for o fim da string, vai verificar o tamanho
     blt $t3, '0', skip_char                # Se caractere < '0', ignora
     bgt $t3, '9', skip_char                # Se caractere > '9', ignora
-    sb $t3, 0($t1)                         # Armazena o dígito numérico em cpf_digits
+    sb $t3, 0($t1)                         # Armazena o dï¿½gito numï¿½rico em cpf_digits
     addi $t1, $t1, 1                       # Incrementa o ponteiro de cpf_digits
-    addi $t2, $t2, 1                       # Incrementa o contador de dígitos
+    addi $t2, $t2, 1                       # Incrementa o contador de dï¿½gitos
 skip_char:
-    addi $t0, $t0, 1                       # Próximo caractere da entrada
+    addi $t0, $t0, 1                       # Prï¿½ximo caractere da entrada
     j process_input
 
 check_length:
     li $t4, 11
-    bne $t2, $t4, input_error              # Se não tiver 11 dígitos, erro
+    bne $t2, $t4, input_error              # Se nï¿½o tiver 11 dï¿½gitos, erro
 
-    # Conversão dos caracteres ASCII para números inteiros
-    la $t0, cpf_digits                     # Ponteiro para percorrer os dígitos
-    li $t1, 0                              # Índice
+    # Conversï¿½o dos caracteres ASCII para nï¿½meros inteiros
+    la $t0, cpf_digits                     # Ponteiro para percorrer os dï¿½gitos
+    li $t1, 0                              # ï¿½ndice
 
 convert_digits:
-    lb $t5, 0($t0)                         # Carrega um dígito como caractere
-    sub $t5, $t5, 48                       # Converte de ASCII para número
-    sb $t5, 0($t0)                         # Armazena o número convertido
-    addi $t0, $t0, 1                       # Próximo dígito
-    addi $t1, $t1, 1                       # Incrementa índice
-    blt $t1, 11, convert_digits            # Loop para todos os 11 dígitos
+    lb $t5, 0($t0)                         # Carrega um dï¿½gito como caractere
+    sub $t5, $t5, 48                       # Converte de ASCII para nï¿½mero
+    sb $t5, 0($t0)                         # Armazena o nï¿½mero convertido
+    addi $t0, $t0, 1                       # Prï¿½ximo dï¿½gito
+    addi $t1, $t1, 1                       # Incrementa ï¿½ndice
+    blt $t1, 11, convert_digits            # Loop para todos os 11 dï¿½gitos
 
-    # Armazena os dígitos verificadores fornecidos pelo usuário
-    la $t0, cpf_digits                     # Ponteiro para os dígitos
+    # Armazena os dï¿½gitos verificadores fornecidos pelo usuï¿½rio
+    la $t0, cpf_digits                     # Ponteiro para os dï¿½gitos
     lb $s1, 9($t0)                         # Primeiro DV fornecido
     lb $s2, 10($t0)                        # Segundo DV fornecido
 
-    # Cálculo do primeiro dígito verificador
+    # Cï¿½lculo do primeiro dï¿½gito verificador
     la $t0, cpf_digits                     # Reinicia o ponteiro
-    li $t1, 0                              # Índice
+    li $t1, 0                              # ï¿½ndice
     li $t2, 10                             # Peso inicial
     li $t3, 0                              # Soma acumulada
 
 calc_first_digit:
-    lb $t4, 0($t0)                         # Carrega o dígito
+    lb $t4, 0($t0)                         # Carrega o dï¿½gito
     mul $t5, $t4, $t2                      # Multiplica pelo peso
     add $t3, $t3, $t5                      # Soma acumulada
-    addi $t0, $t0, 1                       # Próximo dígito
-    addi $t1, $t1, 1                       # Incrementa índice
+    addi $t0, $t0, 1                       # Prï¿½ximo dï¿½gito
+    addi $t1, $t1, 1                       # Incrementa ï¿½ndice
     addi $t2, $t2, -1                      # Decrementa peso
-    blt $t1, 9, calc_first_digit           # Loop para os 9 primeiros dígitos
+    blt $t1, 9, calc_first_digit           # Loop para os 9 primeiros dï¿½gitos
 
-    # Calcula o primeiro dígito verificador
+    # Calcula o primeiro dï¿½gito verificador
     li $t8, 11                             # Divisor
     div $t3, $t8                           # Divide a soma por 11
-    mfhi $t6                               # Resto da divisão
+    mfhi $t6                               # Resto da divisï¿½o
     li $t7, 2
     blt $t6, $t7, first_digit_zero
     li $t7, 11
@@ -89,10 +89,10 @@ first_digit_zero:
 store_first_digit:
     move $s3, $t6                          # Armazena o primeiro DV calculado em $s3
 
-    # Cálculo do segundo dígito verificador
-    # Usando os 9 dígitos originais + o primeiro DV calculado
+    # Cï¿½lculo do segundo dï¿½gito verificador
+    # Usando os 9 dï¿½gitos originais + o primeiro DV calculado
     la $t0, cpf_digits                     # Reinicia o ponteiro
-    li $t1, 0                              # Índice
+    li $t1, 0                              # ï¿½ndice
     li $t2, 11                             # Peso inicial
     li $t3, 0                              # Soma acumulada
 
@@ -101,21 +101,21 @@ calc_second_digit:
     beq $t1, 9, use_first_dv
     j calc_second_digit_done
 continue_second_calc:
-    lb $t4, 0($t0)                         # Carrega o dígito
+    lb $t4, 0($t0)                         # Carrega o dï¿½gito
     j proceed_calc
 use_first_dv:
     move $t4, $s3                          # Usa o primeiro DV calculado
 proceed_calc:
     mul $t5, $t4, $t2                      # Multiplica pelo peso
     add $t3, $t3, $t5                      # Soma acumulada
-    addi $t1, $t1, 1                       # Incrementa índice
+    addi $t1, $t1, 1                       # Incrementa ï¿½ndice
     addi $t2, $t2, -1                      # Decrementa peso
-    addi $t0, $t0, 1                       # Incrementa o ponteiro apenas se índice < 9
-    blt $t1, 10, calc_second_digit         # Loop até índice < 10
+    addi $t0, $t0, 1                       # Incrementa o ponteiro apenas se ï¿½ndice < 9
+    blt $t1, 10, calc_second_digit         # Loop atï¿½ ï¿½ndice < 10
 calc_second_digit_done:
     li $t8, 11                             # Divisor
     div $t3, $t8                           # Divide a soma por 11
-    mfhi $t6                               # Resto da divisão
+    mfhi $t6                               # Resto da divisï¿½o
     li $t7, 2
     blt $t6, $t7, second_digit_zero
     li $t7, 11
@@ -127,19 +127,19 @@ second_digit_zero:
 store_second_digit:
     move $s4, $t6                          # Armazena o segundo DV calculado em $s4
 
-    # Comparação dos dígitos verificadores fornecidos com os calculados
+    # Comparaï¿½ï¿½o dos dï¿½gitos verificadores fornecidos com os calculados
     # $s1: Primeiro DV fornecido
     # $s2: Segundo DV fornecido
     # $s3: Primeiro DV calculado
     # $s4: Segundo DV calculado
 
-    # Comparação do primeiro dígito verificador
-    bne $s1, $s3, cpf_invalid              # Se diferente, CPF inválido
+    # Comparaï¿½ï¿½o do primeiro dï¿½gito verificador
+    bne $s1, $s3, cpf_invalid              # Se diferente, CPF invï¿½lido
 
-    # Comparação do segundo dígito verificador
-    bne $s2, $s4, cpf_invalid              # Se diferente, CPF inválido
+    # Comparaï¿½ï¿½o do segundo dï¿½gito verificador
+    bne $s2, $s4, cpf_invalid              # Se diferente, CPF invï¿½lido
 
-    # Se ambos os dígitos coincidem, CPF é válido
+    # Se ambos os dï¿½gitos coincidem, CPF ï¿½ vï¿½lido
     j cpf_valid
 
 cpf_valid:
