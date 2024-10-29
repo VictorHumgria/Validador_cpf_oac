@@ -1,4 +1,6 @@
 Aqui está o README completo, com todos os arquivos mencionados, desde a interface em Python até os arquivos em Assembly:
+## Link do Vídeo do Projeto
+[Clique aqui para acessar o vídeo do projeto](https://drive.google.com/file/d/1H5_oS_gc0EYSSIMyz1sMAOAMZCwXp7K/view?usp=drive_link)
 
 ---
 
