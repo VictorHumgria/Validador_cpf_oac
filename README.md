@@ -1,4 +1,4 @@
-Aqui está o README completo, com todos os arquivos mencionados, desde a interface em Python até os arquivos em Assembly:
+Aqui está o README completo, com todos os arquivos mencionados, desde a interface em Python até os arquivos em Assembly-MIPS:
 ## Link do Vídeo do Projeto
 
 🎬 [Clique aqui para acessar o vídeo do projeto](https://drive.google.com/file/d/1H5_oS_gc0EYSSIMyz1sMAOAMZcwXp7zK/view?usp=drive_link)
@@ -6,9 +6,9 @@ Aqui está o README completo, com todos os arquivos mencionados, desde a interfa
 
 ---
 
-# Validador de CPF em Assembly
+# Validador de CPF em Assembly MIPS
 
-Este projeto consiste em um sistema completo para validar CPFs utilizando Assembly, incluindo uma interface Python opcional para facilitar a execução e controle. O objetivo é validar números de CPF contidos em um arquivo de entrada, utilizando o algoritmo para cálculo de dígitos verificadores.
+Este projeto consiste em um sistema completo para validar CPFs utilizando Assembly-MIPS, incluindo uma interface Python opcional para facilitar a execução e controle. O objetivo é validar números de CPF contidos em um arquivo de entrada, utilizando o algoritmo para cálculo de dígitos verificadores.
 
 ## Estrutura do Projeto
 
